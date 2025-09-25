@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
 
 const {sequelize} = require('../config/dbconnection');
-const { sequelize } = require('./dbconnection');
 const bcrypt = require('bcryptjs');
 
 // User Model
@@ -15,7 +14,7 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING(60),
     allowNull: false,
     validate: {
-      len: [20, 60],
+      len: [2, 60],
       notEmpty: true,
     },
   },

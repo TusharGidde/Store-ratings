@@ -1,8 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/dbconnection');
-const Rating = require('./Rating');
 
-// Store Model
 const Store = sequelize.define('Store', {
   id: {
     type: DataTypes.INTEGER,
@@ -37,10 +35,6 @@ const Store = sequelize.define('Store', {
   owner_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    references: {
-      model: User,
-      key: 'id',
-    },
   },
   is_active: {
     type: DataTypes.BOOLEAN,
@@ -77,25 +71,37 @@ const Store = sequelize.define('Store', {
   ],
 });
 
-// In models/Store.js
+// Static method to update store's average rating
 Store.updateAverageRating = async function(storeId) {
-  const ratings = await Rating.findAll({
-    where: { store_id: storeId },
-    attributes: ['rating'],
-  });
+  try {
+    const Rating = require('./Rating');
+    
+    const ratings = await Rating.findAll({
+      where: { store_id: storeId },
+      attributes: ['rating'],
+    });
 
-  const totalRatings = ratings.length;
-  const averageRating = totalRatings > 0 
-    ? ratings.reduce((sum, r) => sum + r.rating, 0) / totalRatings 
-    : 0;
+    const totalRatings = ratings.length;
+    const averageRating = totalRatings > 0 
+      ? ratings.reduce((sum, r) => sum + r.rating, 0) / totalRatings 
+      : 0;
 
-  await this.update(
-    {
+    await this.update(
+      {
+        average_rating: parseFloat(averageRating.toFixed(2)),
+        total_ratings: totalRatings,
+      },
+      { where: { id: storeId } }
+    );
+
+    return {
       average_rating: parseFloat(averageRating.toFixed(2)),
       total_ratings: totalRatings,
-    },
-    { where: { id: storeId } }
-  );
+    };
+  } catch (error) {
+    console.error('Error updating store rating:', error);
+    throw error;
+  }
 };
 
 module.exports = Store;
