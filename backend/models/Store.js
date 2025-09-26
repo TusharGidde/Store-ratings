@@ -11,7 +11,7 @@ const Store = sequelize.define('Store', {
     type: DataTypes.STRING(60),
     allowNull: false,
     validate: {
-      len: [20, 60],
+      len: [5, 60],
       notEmpty: true,
     },
   },
