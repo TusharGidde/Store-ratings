@@ -11,12 +11,15 @@ const DB_PORT = process.env.DB_PORT || 3306;
 // Function to create database if it doesn't exist
 const createDatabaseIfNotExists = async () => {
   try {
-    // Connect to MySQL without specifying database
+    // Connect to TiDB without specifying database
     const connection = await mysql.createConnection({
       host: DB_HOST,
       port: DB_PORT,
       user: DB_USER,
       password: DB_PASSWORD,
+      ssl: {
+        rejectUnauthorized: false // Required for TiDB Cloud
+      }
     });
 
     // Create database if it doesn't exist
@@ -36,6 +39,11 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   port: DB_PORT,
   dialect: 'mysql',
   logging: process.env.NODE_ENV === 'development' ? console.log : false,
+  dialectOptions: {
+    ssl: {
+      rejectUnauthorized: false // Required for TiDB Cloud
+    }
+  },
   pool: {
     max: 5,
     min: 0,
