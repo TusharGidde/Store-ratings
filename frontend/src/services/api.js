@@ -49,10 +49,8 @@ export const authAPI = {
 
 // User API calls (Admin)
 export const userAPI = {
-  getDashboard: () => api.get('/users/dashboard'),
   createUser: (userData) => api.post('/users', userData),
   getAllUsers: (params) => api.get('/users', { params }),
-  getUserById: (id) => api.get(`/users/${id}`),
   updateUser: (id, userData) => api.put(`/users/${id}`, userData),
   deleteUser: (id) => api.delete(`/users/${id}`),
 };
@@ -60,7 +58,6 @@ export const userAPI = {
 // Store API calls
 export const storeAPI = {
   getAllStores: (params) => api.get('/stores', { params }),
-  getStoreById: (id) => api.get(`/stores/${id}`),
   createStore: (storeData) => api.post('/stores', storeData),
   updateStore: (id, storeData) => api.put(`/stores/${id}`, storeData),
   getMyStore: () => api.get('/stores/my/store'),
@@ -71,10 +68,8 @@ export const storeAPI = {
 export const ratingAPI = {
   submitRating: (ratingData) => api.post('/ratings', ratingData),
   getMyRatings: (params) => api.get('/ratings/my', { params }),
-  getRatingById: (id) => api.get(`/ratings/${id}`),
   deleteRating: (id) => api.delete(`/ratings/${id}`),
   getStoreRatings: (storeId, params) => api.get(`/ratings/store/${storeId}`, { params }),
-  getUserStoreRating: (storeId) => api.get(`/ratings/store/${storeId}/my-rating`),
   getAllRatings: (params) => api.get('/ratings', { params }),
 };
 

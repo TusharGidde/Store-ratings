@@ -47,7 +47,6 @@ const Dashboard = () => {
         { name: 'Users', href: '/admin/users', icon: Users },
         { name: 'Stores', href: '/admin/stores', icon: Store },
         { name: 'Ratings', href: '/admin/ratings', icon: Star },
-        { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
       ];
     }
 

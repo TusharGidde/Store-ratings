@@ -118,86 +118,7 @@ const getAllStores = async (req, res) => {
   }
 };
 
-// Get Single Store Details
-const getStoreById = async (req, res) => {
-  try {
-    const { id } = req.params;
 
-    const store = await Store.findOne({
-      where: { id, is_active: true },
-      include: [
-        {
-          model: User,
-          as: 'owner',
-          attributes: ['id', 'name', 'email']
-        },
-        {
-          model: Rating,
-          as: 'ratings',
-          include: [{
-            model: User,
-            as: 'user',
-            attributes: ['id', 'name']
-          }],
-          order: [['created_at', 'DESC']]
-        }
-      ]
-    });
-
-    if (!store) {
-      return res.status(404).json({
-        success: false,
-        message: 'Store not found'
-      });
-    }
-
-    // Find user's rating if authenticated
-    let userRating = null;
-    if (req.user) {
-      userRating = store.ratings.find(rating => rating.user_id === req.user.id);
-    }
-
-    // Format response
-    const storeResponse = {
-      id: store.id,
-      name: store.name,
-      email: store.email,
-      address: store.address,
-      average_rating: parseFloat(store.average_rating) || 0,
-      total_ratings: store.total_ratings,
-      created_at: store.created_at,
-      owner: store.owner,
-      user_rating: userRating ? {
-        rating: userRating.rating,
-        comment: userRating.comment,
-        rated_at: userRating.created_at
-      } : null,
-      all_ratings: store.ratings.map(rating => ({
-        id: rating.id,
-        rating: rating.rating,
-        comment: rating.comment,
-        created_at: rating.created_at,
-        user: rating.user
-      }))
-    };
-
-    res.status(200).json({
-      success: true,
-      message: 'Store details fetched successfully',
-      data: {
-        store: storeResponse
-      }
-    });
-
-  } catch (error) {
-    console.error('Get store by ID error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Error fetching store details',
-      error: error.message
-    });
-  }
-};
 
 // Create Store (Admin only)
 const createStore = async (req, res) => {
@@ -491,7 +412,6 @@ const deleteStore = async (req, res) => {
 
 module.exports = {
   getAllStores,
-  getStoreById,
   createStore,
   updateStore,
   getMyStore,

@@ -3,10 +3,8 @@ const router = express.Router();
 const {
   submitRating,
   getMyRatings,
-  getRatingById,
   deleteRating,
   getStoreRatings,
-  getUserStoreRating,
   getAllRatings,
 } = require('../controllers/ratingController');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
@@ -17,8 +15,6 @@ router.use(authenticateToken);
 // Normal user and store owner routes
 router.post('/', submitRating); // Submit or update rating
 router.get('/my', getMyRatings); // Get user's own ratings
-router.get('/store/:store_id/my-rating', getUserStoreRating); // Get user's rating for specific store
-router.get('/:id', getRatingById); // Get single rating details
 router.delete('/:id', deleteRating); // Delete user's own rating
 
 // Store owner routes (can view ratings for their stores)

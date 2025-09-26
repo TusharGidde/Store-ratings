@@ -2,58 +2,7 @@ const { User, Store, Rating } = require('../models');
 const { Op } = require('sequelize');
 const { sequelize } = require('../config/dbconnection');
 
-// Admin Dashboard - Get Statistics
-const getDashboardStats = async (req, res) => {
-  try {
-    // Get total counts
-    const totalUsers = await User.count({
-      where: { role: { [Op.ne]: 'admin' } } // Exclude admin users from count
-    });
-    
-    const totalStores = await Store.count();
-    const totalRatings = await Rating.count();
-    
-    // Get role-wise user count
-    const usersByRole = await User.findAll({
-      attributes: [
-        'role',
-        [sequelize.fn('COUNT', sequelize.col('id')), 'count']
-      ],
-      group: ['role'],
-      raw: true
-    });
 
-
-    // Get top rated stores
-    const topStores = await Store.findAll({
-      attributes: ['id', 'name', 'average_rating', 'total_ratings'],
-      order: [['average_rating', 'DESC']],
-      limit: 5
-    });
-
-    res.status(200).json({
-      success: true,
-      message: 'Dashboard statistics fetched successfully',
-      data: {
-        statistics: {
-          totalUsers,
-          totalStores,
-          totalRatings,
-          usersByRole
-        },
-        topStores
-      }
-    });
-
-  } catch (error) {
-    console.error('Dashboard stats error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Error fetching dashboard statistics',
-      error: error.message
-    });
-  }
-};
 
 // Admin Create User
 const createUser = async (req, res) => {
@@ -389,10 +338,8 @@ const deleteUser = async (req, res) => {
 };
 
 module.exports = {
-  getDashboardStats,
   createUser,
   getAllUsers,
-  getUserById,
   updateUser,
   deleteUser,
 };

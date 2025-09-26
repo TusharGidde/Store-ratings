@@ -161,63 +161,7 @@ const getMyRatings = async (req, res) => {
   }
 };
 
-// Get Single Rating
-const getRatingById = async (req, res) => {
-  try {
-    const { id } = req.params;
 
-    const rating = await Rating.findByPk(id, {
-      include: [
-        {
-          model: User,
-          as: 'user',
-          attributes: ['id', 'name', 'email']
-        },
-        {
-          model: Store,
-          as: 'store',
-          attributes: ['id', 'name', 'address', 'average_rating', 'total_ratings']
-        }
-      ]
-    });
-
-    if (!rating) {
-      return res.status(404).json({
-        success: false,
-        message: 'Rating not found'
-      });
-    }
-
-    // Check if user can view this rating
-    // Users can view their own ratings, store owners can view ratings for their stores, admins can view all
-    const canView = req.user.role === 'admin' || 
-                   rating.user_id === req.user.id || 
-                   (req.user.role === 'store_owner' && rating.store.owner_id === req.user.id);
-
-    if (!canView) {
-      return res.status(403).json({
-        success: false,
-        message: 'Access denied'
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: 'Rating details fetched successfully',
-      data: {
-        rating
-      }
-    });
-
-  } catch (error) {
-    console.error('Get rating by ID error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Error fetching rating details',
-      error: error.message
-    });
-  }
-};
 
 // Delete Rating (User can delete their own rating)
 const deleteRating = async (req, res) => {
@@ -364,52 +308,7 @@ const getStoreRatings = async (req, res) => {
   }
 };
 
-// Get User's Rating for Specific Store
-const getUserStoreRating = async (req, res) => {
-  try {
-    const { store_id } = req.params;
-    const user_id = req.user.id;
 
-    // Check if store exists
-    const store = await Store.findOne({
-      where: { id: store_id, is_active: true }
-    });
-
-    if (!store) {
-      return res.status(404).json({
-        success: false,
-        message: 'Store not found'
-      });
-    }
-
-    // Find user's rating for this store
-    const rating = await Rating.findOne({
-      where: { user_id, store_id },
-      include: [{
-        model: Store,
-        as: 'store',
-        attributes: ['id', 'name', 'average_rating', 'total_ratings']
-      }]
-    });
-
-    res.status(200).json({
-      success: true,
-      message: rating ? 'User rating found' : 'No rating found',
-      data: {
-        rating: rating || null,
-        can_rate: !rating || req.user.role !== 'store_owner' || store.owner_id !== req.user.id
-      }
-    });
-
-  } catch (error) {
-    console.error('Get user store rating error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Error fetching user rating',
-      error: error.message
-    });
-  }
-};
 
 // Get All Ratings (Admin only)
 const getAllRatings = async (req, res) => {
@@ -496,9 +395,7 @@ const getAllRatings = async (req, res) => {
 module.exports = {
   submitRating,
   getMyRatings,
-  getRatingById,
   deleteRating,
   getStoreRatings,
-  getUserStoreRating,
   getAllRatings,
 };

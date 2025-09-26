@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const {
   getAllStores,
-  getStoreById,
   createStore,
   updateStore,
   getMyStore,
@@ -12,7 +11,6 @@ const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 
 // Public routes (can be accessed by authenticated users)
 router.get('/', authenticateToken, getAllStores); // All authenticated users can view stores
-router.get('/:id', authenticateToken, getStoreById); // All authenticated users can view store details
 
 // Store owner routes
 router.get('/my/store', authenticateToken, authorizeRoles('store_owner'), getMyStore);

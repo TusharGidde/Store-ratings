@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -247,16 +247,7 @@ function App() {
               <Route index element={<ManageRatings />} />
             </Route>
 
-            <Route
-              path="/admin/analytics"
-              element={
-                <ProtectedRoute allowedRoles={['admin']}>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<div className="p-6"><h1 className="text-2xl font-bold">Admin Analytics - Coming Soon</h1></div>} />
-            </Route>
+
 
             {/* 404 Route */}
             <Route
