@@ -236,17 +236,6 @@ const AuthForm = ({ type = 'login' }) => {
             </button>
           </div>
 
-          {/* Demo accounts info for login */}
-          {isLogin && (
-            <div className="mt-4 p-4 bg-blue-50 rounded-md border border-blue-200">
-              <h4 className="text-sm font-medium text-blue-800 mb-2">Demo Accounts:</h4>
-              <div className="text-xs text-blue-700 space-y-1">
-                <div><strong>Admin:</strong> admin@storerating.com / Admin123!</div>
-                <div><strong>Store Owner:</strong> jane.store.admin@example.com / Password123!</div>
-                <div><strong>Normal User:</strong> john.admin.created@example.com / Password123!</div>
-              </div>
-            </div>
-          )}
         </form>
       </div>
     </div>
