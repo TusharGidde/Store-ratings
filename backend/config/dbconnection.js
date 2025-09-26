@@ -24,11 +24,11 @@ const createDatabaseIfNotExists = async () => {
 
     // Create database if it doesn't exist
     await connection.execute(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`;`);
-    console.log(`✅ Database '${DB_NAME}' is ready.`);
+    console.log(`Database '${DB_NAME}' is ready.`);
     
     await connection.end();
   } catch (error) {
-    console.error('❌ Error creating database:', error);
+    console.error('Error creating database:', error);
     throw error;
   }
 };
@@ -66,9 +66,9 @@ const testConnection = async () => {
     
     // Then test connection
     await sequelize.authenticate();
-    console.log('✅ Database connection has been established successfully.');
+    console.log('Database connection has been established successfully.');
   } catch (error) {
-    console.error('❌ Unable to connect to the database:', error);
+    console.error('Unable to connect to the database:', error);
     process.exit(1);
   }
 };
@@ -77,9 +77,9 @@ const testConnection = async () => {
 const initializeDatabase = async () => {
   try {
     await sequelize.sync({ force: false });
-    console.log('✅ Database tables synchronized successfully.');
+    console.log('Database tables synchronized successfully.');
   } catch (error) {
-    console.error('❌ Error synchronizing database:', error);
+    console.error('Error synchronizing database:', error);
   }
 };
 

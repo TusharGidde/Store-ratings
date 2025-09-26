@@ -1,27 +1,3 @@
-# Store Rating Platform
-
-A full-stack web application for rating and managing stores. Built with Node.js, Express, MySQL, React, and Tailwind CSS.
-
-## Features
-
-### For Normal Users (Customers)
-- Browse all available stores
-- Search stores by name or address
-- Rate stores (1-5 stars) with optional comments
-- View store ratings and reviews
-
-### For Store Owners
-- Create and manage their store profile
-- View store statistics (average rating, total reviews)
-- See all customer reviews and ratings
-- Edit store information
-
-### For Admins
-- View system overview and statistics
-- Manage all users, stores, and ratings
-- Delete inappropriate content
-- Monitor platform activity
-
 ## Tech Stack
 
 **Backend:**
@@ -172,21 +148,3 @@ npm run dev  # Uses nodemon for auto-restart
 cd frontend
 npm run dev  # Uses Vite dev server with hot reload
 ```
-
-### Building for Production
-```bash
-cd frontend
-npm run build
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## License
-
-This project is licensed under the ISC License.

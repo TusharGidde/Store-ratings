@@ -26,32 +26,32 @@ const migrateTables = async () => {
   let localConn, tidbConn;
   
   try {
-    console.log('🔄 Starting migration from local MySQL to TiDB...');
+    console.log('Starting migration from local MySQL to TiDB...');
     
     // Connect to both databases
     localConn = await mysql.createConnection(localConfig);
     tidbConn = await mysql.createConnection(tidbConfig);
     
-    console.log('✅ Connected to both databases');
+    console.log('Connected to both databases');
     
     // Tables to migrate (in order due to foreign keys)
     const tables = ['users', 'stores', 'ratings'];
     
     for (const table of tables) {
-      console.log(`\n📋 Migrating table: ${table}`);
+      console.log(`\nMigrating table: ${table}`);
       
       // Get data from local MySQL
       const [rows] = await localConn.execute(`SELECT * FROM ${table}`);
-      console.log(`📊 Found ${rows.length} records in ${table}`);
+      console.log(`Found ${rows.length} records in ${table}`);
       
       if (rows.length === 0) {
-        console.log(`⏭️  Skipping empty table: ${table}`);
+        console.log(`Skipping empty table: ${table}`);
         continue;
       }
       
       // Clear existing data in TiDB (optional)
       await tidbConn.execute(`DELETE FROM ${table}`);
-      console.log(`🗑️  Cleared existing data in TiDB ${table}`);
+      console.log(`Cleared existing data in TiDB ${table}`);
       
       // Insert data into TiDB
       for (const row of rows) {
@@ -67,13 +67,13 @@ const migrateTables = async () => {
         await tidbConn.execute(insertQuery, values);
       }
       
-      console.log(`✅ Migrated ${rows.length} records to TiDB ${table}`);
+      console.log(`Migrated ${rows.length} records to TiDB ${table}`);
     }
     
-    console.log('\n🎉 Migration completed successfully!');
+    console.log('\nMigration completed successfully!');
     
     // Verify migration
-    console.log('\n📊 Verification:');
+    console.log('\nVerification:');
     for (const table of tables) {
       const [localCount] = await localConn.execute(`SELECT COUNT(*) as count FROM ${table}`);
       const [tidbCount] = await tidbConn.execute(`SELECT COUNT(*) as count FROM ${table}`);
@@ -82,7 +82,7 @@ const migrateTables = async () => {
     }
     
   } catch (error) {
-    console.error('❌ Migration failed:', error);
+    console.error('Migration failed:', error);
   } finally {
     if (localConn) await localConn.end();
     if (tidbConn) await tidbConn.end();
